@@ -1,0 +1,35 @@
+name: self-hosted runner test
+
+on:
+  push:
+    branches:
+      - test-self-hosted-runner
+    paths:
+      - ".github/workflows/self-hosted-runner-test.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print runner context
+        run: |
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner architecture: $RUNNER_ARCH"
+          echo "Workspace: $GITHUB_WORKSPACE"
+          echo "Ref: $GITHUB_REF"
+          echo "SHA: $GITHUB_SHA"
+
+      - name: Verify basic tools
+        run: |
+          git --version
+          pwd
+          ls -la
